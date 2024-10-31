@@ -1,0 +1,51 @@
+.postContainer {
+    display: flex;
+    flex-direction: column;
+    border: 1px black solid;
+}
+
+.globalTopInformationsContainer {
+    display: flex;
+    flex-direction: row;
+    border: 1px black solid;
+}
+
+.topInformationsContainer {
+    display: flex;
+    flex: 5;
+    flex-direction: column;
+}
+
+.imageAndDateContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.iconsContainer {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    justify-content: end;
+}
+
+.titlePostContainer {
+    flex: 1;
+    font-weight: 100;
+    font-weight: bold;
+    font-size: 30px;
+
+}
+
+.dateLastModificationPost {
+    font-size: 15px;
+}
+
+.icon {
+    padding: 10px;
+    font-size: 30px;
+    color: rgb(0, 106, 255);
+}
+
+.descriptionPost {
+    font-size: 25px;
+}
