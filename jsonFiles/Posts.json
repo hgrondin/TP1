@@ -1,0 +1,10 @@
+[
+    {
+        "Id": "a634d710-46c0-11ee",
+        "Title": "Première nouvelle",
+        "Text": "Bonjour, ceci est simplement une première nouvelle, rien de très spécial!",
+        "Category": "Test",
+        "Image": "no-image.jpg",
+        "Creation": 0
+    }
+]
