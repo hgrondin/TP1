@@ -59,6 +59,22 @@
     padding-bottom: 8px;
 }
 
+#searchContainer {
+    max-width: 100%;
+    display: grid;
+    grid-template-columns: 40px auto auto;
+    align-items: top;
+    gap: 2px;
+}
+
+#searchContainer input {
+    margin-bottom: 0px !important;
+}
+
+#searchContainer i {
+    text-align: left;
+}
+
 ::-webkit-scrollbar {
     width: 16px;
 }
@@ -205,17 +221,4 @@ input {
 
 a {
     text-decoration: none !important;
-}
-
-.searchContainer {
-    max-width: 100%;
-    display: grid;
-    grid-template-columns: 40px auto !important;
-    align-items: top;
-}
-.searchContainer input {
-    margin-bottom: 0px !important;
-}
-.searchContainer i {
-    text-align: left;
 }

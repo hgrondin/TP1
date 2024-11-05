@@ -16,6 +16,7 @@ function Init_UI() {
 }
 function renderAbout() {
     saveContentScrollPosition();
+    $("#searchContainer").hide();
     eraseContent();
     $("#createPost").hide();
     $("#abort").show();
@@ -40,6 +41,7 @@ function renderAbout() {
 async function renderPosts() {
     $("#actionTitle").text("Liste de publications");
     $("#createPost").show();
+    $("#searchContainer").show();
     $("#abort").hide();
     // TODO
 }
@@ -57,6 +59,7 @@ function restoreContentScrollPosition() {
     $("#content")[0].scrollTop = contentScrollPosition;
 }
 function renderError(message) {
+    $("#searchContainer").hide();
     eraseContent();
     $("#content").append(
         $(`
@@ -67,13 +70,16 @@ function renderError(message) {
     );
 }
 function renderCreatePostForm() {
+    $("#searchContainer").hide();
     // TODO
 }
 async function renderEditPostForm(id) {
+    $("#searchContainer").hide();
     // TODO
 }
 async function renderDeletePostForm(id) {
     showWaitingGif();
+    $("#searchContainer").hide();
     $("#createPost").hide();
     $("#abort").show();
     $("#actionTitle").text("Retrait d'une publication");
@@ -115,6 +121,7 @@ async function renderDeletePostForm(id) {
     }
 }
 function renderPostForm(post = null) {
+    $("#searchContainer").hide();
     $("#createPost").hide();
     $("#abort").show();
     eraseContent();
@@ -196,4 +203,19 @@ function getFormData($form) {
         jsonObject[control.name] = control.value.replace(removeTag, "");
     });
     return jsonObject;
+}
+function renderCategories(categories){
+    let select = $('#searchSelect');
+    select.empty();
+    select.append($('<option>', {
+        value: "all",
+        text: "Toutes les catégories"
+    }));
+
+    categories.forEach(category => {
+        select.append($('<option>', {
+            value: category,
+            text: category
+        }));
+    });
 }
