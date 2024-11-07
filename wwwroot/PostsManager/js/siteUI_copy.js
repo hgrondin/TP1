@@ -3,8 +3,9 @@ let pageManager;
 
 Init_UI();
 
-function Init_UI() {
-    itemLayout = {
+async function Init_UI() {
+    renderPosts();
+    /*itemLayout = {
         width: $("#sample").outerWidth(), //La longueur extérieur de l'élément
         height: $("#sample").outerHeight() //La hauteur extérieur de l'élément
     };
@@ -22,7 +23,7 @@ function Init_UI() {
     });
     $('#aboutCmd').on("click", function () {
         renderAbout();
-    });
+    });*/
 }
 function renderAbout() {
     saveContentScrollPosition();
@@ -79,8 +80,8 @@ function renderError(message) {
 }
 
 async function renderPosts() {
-    for (let i = 0; i < 2; i++) {
-        renderPost()
+    for (let i = 0; i < 5; i++) {
+        $("#itemsPanel").append(renderPost());
     }
 }
 
