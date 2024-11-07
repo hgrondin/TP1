@@ -32,7 +32,8 @@
     justify-content: flex-start;
     gap: 8px;
     height: 100vh;
-    background-color: rgb(239, 239, 239);
+    /*background-color: rgb(239, 239, 239);*/
+    background-color: rgb(255, 255, 255);
     overflow-y: scroll;
     overflow: hidden;
 
