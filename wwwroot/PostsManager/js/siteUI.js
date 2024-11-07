@@ -89,47 +89,55 @@ async function renderEditPostForm(id) {
     // TODO
 }
 async function renderDeletePostForm(id) {
-    hold_Periodic_Refresh = true;
-    showWaitingGif();
-    $("#searchContainer").hide();
+    $("#scrollPanel").hide();
     $("#createPost").hide();
     $("#abort").show();
+    hold_Periodic_Refresh = true;
+    $('#postForm').show();
+    $('#postForm').empty();
     $("#actionTitle").text("Retrait d'une publication");
-    let post = await API_GetPost(id);
     eraseContent();
-    if (post !== null) {
-        $("#content").append(`
-        <div class="postdeleteForm">
-            <h4>Effacer la publication suivante?</h4>
-            <br>
-            <div class="postRow" post_id=${post.Id}">
-                <div class="postContainer">
-                    <div class="postLayout">
-                        <div class="postTitle">${post.Title}</div>
-                        <div class="postText">${post.Text}</div>
-                        <div class="postCategory">${post.Category}</div>
-                        <div class="postImage">${post.Image}</div>
-                    </div>
-                </div>  
-            </div>   
-            <br>
-            <input type="button" value="Effacer" id="deletePost" class="btn btn-primary">
-            <input type="button" value="Annuler" id="cancel" class="btn btn-secondary">
-        </div>    
-        `);
-        $('#deletePost').on("click", async function () {
-            showWaitingGif();
-            let result = await API_DeletePost(post.Id);
-            if (result)
+    let res = await Posts_API.Get(id);
+    if (!Posts_API.error){
+        let post = res.data;
+        if (post !== null) {
+            $("#content").append(`
+            <div class="postdeleteForm">
+                <h4>Effacer la publication suivante?</h4>
+                <br>
+                <div class="postRow" post_id=${post.Id}">
+                    <div class="postContainer">
+                        <div class="postLayout">
+                            <div class="postTitle">${post.Title}</div>
+                            <div class="postText">${post.Text}</div>
+                            <div class="postCategory">${post.Category}</div>
+                            <div class="postImage">${post.Image}</div>
+                        </div>
+                    </div>  
+                </div>   
+                <br>
+                <input type="button" value="Effacer" id="deletePost" class="btn btn-primary">
+                <input type="button" value="Annuler" id="cancel" class="btn btn-secondary">
+            </div>    
+            `);
+            $('#deletePost').on("click", async function () {
+                showWaitingGif();
+                let result = await API_DeletePost(post.Id);
+                if (result)
+                    renderPosts();
+                else
+                    renderError("Une erreur est survenue!");
+            });
+            $('#cancel').on("click", function () {
                 renderPosts();
-            else
-                renderError("Une erreur est survenue!");
-        });
-        $('#cancel').on("click", function () {
-            renderPosts();
-        });
-    } else {
-        renderError("Publication introuvable!");
+            });
+        }
+        else {
+            renderError("Publication introuvable!");
+        }
+    }
+    else{
+        renderError(Posts_API.currentHttpError);
     }
 }
 function renderPostForm(post = null) {
@@ -232,7 +240,6 @@ function renderCategories(categories){
         }));
     });
 }
-
 function filterKeywords(searchValue){
     let keywordsTab = searchValue.trim().split(" ");
     if (keywordsTab.length == 0){ //searchValue was empty
@@ -244,18 +251,19 @@ function filterKeywords(searchValue){
     keywordsTab.forEach(function(keyword){
         keywords += keyword + ",";
     });
+    keywords = keywords.slice(0, -1); //Remove last ','
     filters["keywords"] = keywords;
 
     renderPosts(buildQueryString());
 }
 function buildQueryString(){
     let queryString = "?";
-    for (var filterKey in filters){
-        queryString += `${filterKey}=${filters[filterKey]}&`;
+    for (var key in filters){
+        queryString += `${key}=${filters[key]}&`;
     }
+    queryString = queryString.slice(0, -1); //Remove last '&'
     return queryString;
 }
-
 function start_Periodic_Refresh() {
     setInterval(async () => {
         if (!hold_Periodic_Refresh) {
