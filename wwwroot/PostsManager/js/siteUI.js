@@ -1,4 +1,8 @@
+const periodicRefreshPeriod = 10;
+let currentETag = "";
+let hold_Periodic_Refresh = false;
 let contentScrollPosition = 0;
+let filters = {};
 Init_UI();
 
 function Init_UI() {
@@ -13,8 +17,11 @@ function Init_UI() {
     $('#aboutCmd').on("click", function () {
         renderAbout();
     });
+
+    start_Periodic_Refresh();
 }
 function renderAbout() {
+    hold_Periodic_Refresh = true;
     saveContentScrollPosition();
     $("#searchContainer").hide();
     eraseContent();
@@ -38,7 +45,8 @@ function renderAbout() {
             </div>
         `))
 }
-async function renderPosts() {
+async function renderPosts(queryString = "") {
+    hold_Periodic_Refresh = false;
     $("#actionTitle").text("Liste de publications");
     $("#createPost").show();
     $("#searchContainer").show();
@@ -59,6 +67,7 @@ function restoreContentScrollPosition() {
     $("#content")[0].scrollTop = contentScrollPosition;
 }
 function renderError(message) {
+    hold_Periodic_Refresh = true;
     $("#searchContainer").hide();
     eraseContent();
     $("#content").append(
@@ -70,14 +79,17 @@ function renderError(message) {
     );
 }
 function renderCreatePostForm() {
+    hold_Periodic_Refresh = true;
     $("#searchContainer").hide();
     // TODO
 }
 async function renderEditPostForm(id) {
+    hold_Periodic_Refresh = true;
     $("#searchContainer").hide();
     // TODO
 }
 async function renderDeletePostForm(id) {
+    hold_Periodic_Refresh = true;
     showWaitingGif();
     $("#searchContainer").hide();
     $("#createPost").hide();
@@ -121,6 +133,7 @@ async function renderDeletePostForm(id) {
     }
 }
 function renderPostForm(post = null) {
+    hold_Periodic_Refresh = true;
     $("#searchContainer").hide();
     $("#createPost").hide();
     $("#abort").show();
@@ -218,4 +231,41 @@ function renderCategories(categories){
             text: category
         }));
     });
+}
+
+function filterKeywords(searchValue){
+    let keywordsTab = searchValue.trim().split(" ");
+    if (keywordsTab.length == 0){ //searchValue was empty
+        if ("keywords" in filters){ //Check if "keywords" key was in the filters object
+            delete filters[keywords];
+        }
+    }
+    let keywords = "";
+    keywordsTab.forEach(function(keyword){
+        keywords += keyword + ",";
+    });
+    filters["keywords"] = keywords;
+
+    renderPosts(buildQueryString());
+}
+function buildQueryString(){
+    let queryString = "?";
+    for (var filterKey in filters){
+        queryString += `${filterKey}=${filters[filterKey]}&`;
+    }
+    return queryString;
+}
+
+function start_Periodic_Refresh() {
+    setInterval(async () => {
+        if (!hold_Periodic_Refresh) {
+            let etag = await Posts_API.HEAD();
+            if (currentETag != etag) {
+                currentETag = etag;
+                //await pageManager.update(false);
+                //compileCategories();
+            }
+        }
+    },
+        periodicRefreshPeriod * 1000);
 }

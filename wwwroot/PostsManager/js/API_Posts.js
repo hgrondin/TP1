@@ -1,47 +1,81 @@
 //const API_URL = "https://api-server-5.glitch.me/api/posts";
-const API_URL = "http://localhost:5000/api/posts";
-let currentHttpError = "";
-
-function API_getcurrentHttpError () {
-    return currentHttpError; 
-}
-function API_GetPosts() {
-    return new Promise(resolve => {
-        $.ajax({
-            url: API_URL,
-            success: posts => { currentHttpError = ""; resolve(posts); },
-            error: (xhr) => { console.log(xhr); resolve(null); }
+class Posts_API{
+    static API_URL() { return "http://localhost:5000/api/posts"; }
+    static initHttpState() {
+        this.currentHttpError = "";
+        this.currentStatus = 0;
+        this.error = false;
+    }
+    static setHttpErrorState(xhr) {
+        if (xhr.responseJSON)
+            this.currentHttpError = xhr.responseJSON.error_description;
+        else
+            this.currentHttpError = xhr.statusText == 'error' ? "Service introuvable" : xhr.statusText;
+        this.currentStatus = xhr.status;
+        this.error = true;
+    }
+    static async HEAD() {
+        Posts_API.initHttpState();
+        return new Promise(resolve => {
+            $.ajax({
+                url: this.API_URL(),
+                type: 'HEAD',
+                contentType: 'text/plain',
+                complete: data => { resolve(data.getResponseHeader('ETag')); },
+                error: (xhr) => { Posts_API.setHttpErrorState(xhr); resolve(null); }
+            });
         });
-    });
-}
-function API_GetPost(postId) {
-    return new Promise(resolve => {
-        $.ajax({
-            url: API_URL + "/" + postId,
-            success: post => { currentHttpError = ""; resolve(post); },
-            error: (xhr) => { currentHttpError = xhr.responseJSON.error_description; resolve(null); }
+    }
+    static async Get(id = null) {
+        Posts_API.initHttpState();
+        return new Promise(resolve => {
+            $.ajax({
+                url: this.API_URL() + (id != null ? "/" + id : ""),
+                complete: data => { resolve({ ETag: data.getResponseHeader('ETag'), data: data.responseJSON }); },
+                error: (xhr) => { Posts_API.setHttpErrorState(xhr); resolve(null); }
+            });
         });
-    });
-}
-function API_SavePost(post, create) {
-    return new Promise(resolve => {
-        $.ajax({
-            url: create ? API_URL :  API_URL + "/" + post.Id,
-            type: create ? "POST" : "PUT",
-            contentType: 'application/json',
-            data: JSON.stringify(post),
-            success: (/*data*/) => { currentHttpError = ""; resolve(true); },
-            error: (xhr) => {currentHttpError = xhr.responseJSON.error_description; resolve(false /*xhr.status*/); }
+    }
+    static async GetQuery(queryString = "") {
+        Posts_API.initHttpState();
+        return new Promise(resolve => {
+            $.ajax({
+                url: this.API_URL() + queryString,
+                complete: data => {
+                    resolve({ ETag: data.getResponseHeader('ETag'), data: data.responseJSON });
+                },
+                error: (xhr) => {
+                    Posts_API.setHttpErrorState(xhr); resolve(null);
+                }
+            });
         });
-    });
-}
-function API_DeletePost(id) {
-    return new Promise(resolve => {
-        $.ajax({
-            url: API_URL + "/" + id,
-            type: "DELETE",
-            success: () => { currentHttpError = ""; resolve(true); },
-            error: (xhr) => { currentHttpError = xhr.responseJSON.error_description; resolve(false /*xhr.status*/); }
+    }
+    static async Save(data, create = true) {
+        Posts_API.initHttpState();
+        return new Promise(resolve => {
+            $.ajax({
+                url: create ? this.API_URL() : this.API_URL() + "/" + data.Id,
+                type: create ? "POST" : "PUT",
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: (data) => { resolve(data); },
+                error: (xhr) => { Posts_API.setHttpErrorState(xhr); resolve(null); }
+            });
         });
-    });
+    }
+    static async Delete(id) {
+        return new Promise(resolve => {
+            $.ajax({
+                url: this.API_URL() + "/" + id,
+                type: "DELETE",
+                complete: () => {
+                    Posts_API.initHttpState();
+                    resolve(true);
+                },
+                error: (xhr) => {
+                    Posts_API.setHttpErrorState(xhr); resolve(null);
+                }
+            });
+        });
+    }
 }

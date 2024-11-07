@@ -6,5 +6,13 @@
         "Category": "Test",
         "Image": "no-image.jpg",
         "Creation": 0
+    },
+    {
+        "Id": "g567a725-46c0-11ff",
+        "Title": "Deuxième nouvelle",
+        "Text": "Bonjour, ceci est simplement une deuxième nouvelle, rien de très spécial!",
+        "Category": "Test2",
+        "Image": "no-image.jpg",
+        "Creation": 0
     }
 ]
