@@ -1,11 +1,12 @@
 let contentScrollPosition = 0;
 let pageManager;
+let currentETag = "";
 
 Init_UI();
 
 async function Init_UI() {
-    renderPosts();
-    /*itemLayout = {
+    //renderPosts();
+    itemLayout = {
         width: $("#sample").outerWidth(), //La longueur extérieur de l'élément
         height: $("#sample").outerHeight() //La hauteur extérieur de l'élément
     };
@@ -23,8 +24,9 @@ async function Init_UI() {
     });
     $('#aboutCmd').on("click", function () {
         renderAbout();
-    });*/
+    });
 }
+
 function renderAbout() {
     saveContentScrollPosition();
     eraseContent();
@@ -79,10 +81,23 @@ function renderError(message) {
     );
 }
 
-async function renderPosts() {
-    for (let i = 0; i < 5; i++) {
-        $("#itemsPanel").append(renderPost());
+async function renderPosts(queryString) {
+    let response = await API_Posts.Get(queryString);
+
+    /*TO DO: Faire la gesiton avec le Etag (voir appUI.cs du projet Bookmarks2)*/
+    currentETag = response.ETag;
+    let Posts = response.data;
+
+    if (Posts.length > 0) {
+        Posts.forEach(Post => {
+            $("#itemsPanel").append(renderPost());
+        });
     }
+
+
+   /* for (let i = 0; i < 5; i++) {
+        $("#itemsPanel").append(renderPost());
+    }*/
 }
 
 function renderPost() {
