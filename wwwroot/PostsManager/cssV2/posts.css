@@ -2,7 +2,12 @@
     display: flex;
     flex-direction: column;
     border: 1px black solid;
-    padding: 4px;
+    /*padding: 4px;*/
+
+    padding: 8px;
+    padding-bottom: 8px;
+    padding-bottom: 0px;
+    scroll-snap-align: start;
 }
 
 .globalTopInformationsContainer {
@@ -69,7 +74,7 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    width: 100%;
+    width: 800px;
     height: 400px;
 }
 
