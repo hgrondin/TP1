@@ -61,9 +61,17 @@
 }
 
 .seeMoreDescriptionPost {
+    width: fit-content;
     text-align: center;
     text-decoration:underline;
     color: rgb(119, 119, 119);
+    cursor: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.seeMoreDescriptionPost:hover {
+    cursor: pointer;
 }
 
 .text {
@@ -77,4 +85,6 @@
     width: 100%;
     height: 100%;
 }
+
+
 
