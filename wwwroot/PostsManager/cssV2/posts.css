@@ -23,6 +23,8 @@
 
 .imageAndDateContainer {
     display: flex;
+    width: 100%;
+    height: 50vh;
     flex-direction: column;
 }
 
@@ -78,8 +80,17 @@
     font-family: "Roboto", sans-serif;
 }
 
+/*
 .imagePost {
     background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+}*/
+
+.imagePost {
+    background-size:100%;
     background-position: center;
     background-repeat: no-repeat;
     width: 100%;

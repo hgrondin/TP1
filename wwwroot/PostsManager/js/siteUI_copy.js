@@ -88,18 +88,51 @@ async function renderPosts(queryString) {
     if (!Posts_API.error) { //S'il n'y a pas d'erreur, on peut continuer
 
         /*TO DO: Faire la gesiton avec le Etag (voir appUI.cs du projet Bookmarks2)*/
-        currentETag = response.ETag;
-        let Posts = response.data;
+        //currentETag = response.ETag;
+        let posts = response.data;
 
-        let descriptionTest = "Le ministre de l’Immigration, Jean-François Roberge, a déposé ce matin son plan annuel d’immigration. Les chiffres dévoilés indiquent que le Québec";
+        let counter = 0;
+        posts.forEach(post => {
+            let words = post.Text.split(" ");
+            let text = post.Text;
+            let wordsLengthMore = false;
+            if (words.length > 30) {
+                let wordsCount = 0;
+                let indexWord = 0;
+                for (let i = 0; i < post.Text.length; i++) {
+                    if (post.Text[i] == " ") {
+                        if (wordsCount+1 == 30) {
+                            indexWord = i;
+                            break;
+                        }
+                        wordsCount++;
+                    }
+                }
+                text = post.Text.substr(0, indexWord);
+                wordsLengthMore = true;
+            }
 
+            $("#itemsPanel").append(renderPost(post, text, counter, wordsLengthMore));
+
+            if (wordsLengthMore) {
+                $(".seeMoreDescriptionPost").on("click", function() {
+                    let id = $(this).attr("seeMore");
+                    $('[completeDescription="'+id+'"]').show();
+                    $('[descriptionPostId="'+id+'"]').hide();
+                    $(this).hide();
+                });
+            }          
+
+            counter++;
+        });
+        /*
         for (let i = 0; i < 5; i++) {
             $("#itemsPanel").append(renderPost(i));
             $(".seeMoreDescriptionPost").on("click", function() {
                 $('[descriptionPostId="'+i+'"]').text(descriptionTest);
                 $(this).hide();
             });
-        }
+        }*/
 
         showPosts();
 /*
@@ -118,16 +151,32 @@ async function renderPosts(queryString) {
     }*/
 }
 
-function renderPost(descriptionPostId) {
+function renderPost(post, textDescription, descriptionPostId, wordsLengthMore) {
+
+    let elementsWordsLengthMore;
+
+    if (wordsLengthMore) {
+        elementsWordsLengthMore = `<p class="descriptionPost text" completeDescription="${descriptionPostId}" style="display: none">
+                                        ${post.Text}                 
+                                    </p>
+                                    <p class="descriptionPost text" descriptionPostId="${descriptionPostId}">
+                                        ${textDescription}...
+                                    </p>
+                                    <p class="seeMoreDescriptionPost seeMore" seeMore="${descriptionPostId}">Voir plus</p>
+                                    `;
+    } else {
+        elementsWordsLengthMore = `<p class="descriptionPost text">
+                                        ${textDescription}                 
+                                    </p>`;
+    }
+
     return $(`
 <div class="postContainer">
             <div class="globalTopInformationsContainer">
                 <div class="topInformationsContainer">
-                    <p class="categoryPost text">IMMIGRATION</p>
+                    <p class="categoryPost text">${post.Category.toUpperCase()}</p>
                     <div class="titlePostContainer text">
-                        <p>Explosion de l'immigration permanente au Québec: un seuil de 67 000 prévu l’an
-                            prochain
-                        </p>
+                        <p>${post.Title.toUpperCase()}</p>
                     </div>
                 </div>
                 <div class="iconsContainer">
@@ -137,29 +186,20 @@ function renderPost(descriptionPostId) {
             </div>
             <div class="imageAndDateContainer">
                 <!--Image temporaire-->
-                <img class="imagePost"
-                    src="https://images.radio-canada.ca/q_auto,w_1200/v1/ici-info/16x9/justin-trudeau-francois-legault-rencontre-immigration-quebec.jpg"
-                    alt="Image en lien avec la nouvelle">
+                <div class="imagePost" style="background-image:url('${post.Image}')"></div>
+
             </div>
             <div>
                 <p class="dateLastModificationPost text">Jeudi 31 octobre 2024 - 12:22:18</p>
             </div>
             <div>
-                <p class="descriptionPost text" descriptionPostId="${descriptionPostId}">Le ministre de l’Immigration, Jean-François Roberge, a déposé ce
-                    matin son plan annuel d’immigration. Les chiffres dévoilés indiquent que le Québec
-                    accueillera
-                    en 2025 entre 64 000 et 67 000 nouveaux arrivants permanents, soit environ 10 000 de plus
-                    que
-                    cette année.
-                    
-                    <p class="seeMoreDescriptionPost seeMore">Voir plus</p>
-                </p>
-                
+                ${elementsWordsLengthMore}                
                 <!--<p class="descriptionPost text">Le ministre de l’Immigration, Jean-François Roberge, a déposé ce matin son plan annuel d’immigration.</p>-->
             </div>
         </div>
     `);
 }
+
 
 /*
 function renderPost() {
