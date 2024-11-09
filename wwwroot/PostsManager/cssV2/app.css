@@ -50,8 +50,6 @@
 }
 
 #header {
-    border: 2px solid #7e7e7e;
-    border-radius: 9px;
     background-color: white;
     display: grid;
     grid-template-columns: auto 30px 30px;
@@ -112,7 +110,7 @@
 }
 
 #content {
-    height: 100rem;
+    height: 92%;
     /*height: 1px;*/
     flex:1;
     border: 2px solid #a4a4a4;
@@ -193,10 +191,75 @@
     height: 40px;
 }
 
-@media screen and (min-width:650px) {
 
-    .BookmarkLayout {
-        grid-template-columns: auto 30%;
+
+@media screen and (max-height:2200px) {
+
+    #content {
+        height: 90%;
+    }
+}
+
+@media screen and (max-height:1400px) {
+
+    #content {
+        height: 85%;
+    }
+}
+
+@media screen and (max-height:1300px) {
+
+    #content {
+        height: 80%;
+    }
+}
+
+@media screen and (max-height:1000px) {
+
+    #content {
+        height: 78%;
+    }
+}
+
+@media screen and (max-height:900px) {
+
+    #content {
+        height: 76%;
+    }
+}
+
+@media screen and (max-height:800px) {
+
+    #content {
+        height: 72%;
+    }
+}
+
+@media screen and (max-height:700px) {
+
+    #content {
+        height: 70%;
+    }
+}
+
+@media screen and (max-height:650px) {
+
+    #content {
+        height: 63vh;
+    }
+}
+
+@media screen and (max-height:600px) {
+
+    #content {
+        height: 58vh;
+    }
+}
+
+@media screen and (max-height:550px) {
+
+    #content {
+        height: 50vh;
     }
 }
 
