@@ -34,10 +34,11 @@ async function Init_UI() {
         saveContentScrollPosition();
         renderCreatePostForm();
     });
-    /*
+    
     $('#abort').on("click", async function () {
-        renderPosts();
+        showPosts();
     });
+    /*
     $('#aboutCmd').on("click", function () {
         renderAbout();
     });*/
@@ -72,6 +73,9 @@ function showPosts() {
     $("#createPost").show();
     $("#abort").hide();  
     $("#scrollPanel").show();
+    $("#postForm").hide();
+    $("#content").show();
+    $("#searchContainer").show();
 }
 function showWaitingGif() {
     eraseContent();
@@ -325,7 +329,6 @@ function renderPostForm(post = null) {
     $("#searchContainer").hide();
     $("#content").hide();
     $("#abort").show();
-    eraseContent();
     let create = post == null;
     if (create) {
         post = newPost();
@@ -390,7 +393,7 @@ function renderPostForm(post = null) {
         </div>
     `);
     initImageUploaders();
-    initFormValidation(); // important do to after all html injection!
+    //initFormValidation(); // important do to after all html injection!
     $('#postForm').on("submit", async function (event) {
         event.preventDefault();
         let post = getFormData($("#postForm"));
@@ -402,7 +405,7 @@ function renderPostForm(post = null) {
             renderError("Une erreur est survenue! " + API_getcurrentHttpError());
     });
     $('#cancel').on("click", function () {
-        renderPosts();
+        showPosts();
     });
 }
 
