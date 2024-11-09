@@ -23,16 +23,18 @@ async function Init_UI() {
     pageManager = new PageManager('scrollPanel', 'itemsPanel', itemLayout, renderPosts);
 
     showPosts();
-
+    $("#postForm").hide();
+    $("#aboutContainer").hide();
     $("#searchIcon").on("click", async function() {
         pageManager.update(false, true);
     });
 
    // renderPosts();
-   /* $('#createPost').on("click", async function () {
+    $('#createPost').on("click", async function () {
         saveContentScrollPosition();
         renderCreatePostForm();
     });
+    /*
     $('#abort').on("click", async function () {
         renderPosts();
     });
@@ -66,8 +68,7 @@ function renderAbout() {
 }
 
 
-function showPosts() {
-    $("#actionTitle").text("MONTRÉAL POSTS");
+function showPosts() {    
     $("#createPost").show();
     $("#abort").hide();  
     $("#scrollPanel").show();
@@ -208,8 +209,8 @@ function renderPost(post, textDescription, descriptionPostId, wordsLengthMore) {
                     </div>
                 </div>
                 <div class="iconsContainer">
-                    <span class="fa fa-edit icon"></span>
-                    <span class="fa fa-trash icon"></span>
+                    <span class="cmdIcon fa fa-edit" title="Modifier la publication"></span>
+                    <span class="cmdIcon fa fa-trash" title="Supprimer la publication"></span>
                 </div>
             </div>
             <div class="imageAndDateContainer">
@@ -272,7 +273,7 @@ function renderPost() {
 
 
 function renderCreatePostForm() {
-    // TODO
+    renderPostForm();
 }
 async function renderEditPostForm(id) {
     // TODO
@@ -328,8 +329,12 @@ function renderPostForm(post = null) {
         post = newPost();
         post.Image = "images/no-image.jpg";
     }
-    $("#actionTitle").text(create ? "Création" : "Modification");
+    
+    $("#postForm").show();
+    $("#postForm").empty();
     $("#content").append(`
+        <h2 id="actionTitle" class="text">${create ? "Création d'une publication" : "Modification d'une publication"}</h4>
+
         <form class="form" id="postForm">
             <input type="hidden" name="Id" value="${post.Id}"/>
 
@@ -352,9 +357,8 @@ function renderPostForm(post = null) {
                 placeholder="Contenu de la publication"
                 required
                 RequireMessage="Veuillez entrer le contenu de la publication" 
-                value="${post.Text}" 
-            >${post.Text}
-            </textarea>
+                value="" 
+            ></textarea>
             <label for="Category" class="form-label">Catégorie </label>
             <input
                 class="form-control"
@@ -394,6 +398,16 @@ function renderPostForm(post = null) {
         renderPosts();
     });
 }
+
+function newPost() {
+    let Post = {};
+    Post.Id = 0;
+    Post.Title = "";
+    Post.Text = "";
+    Post.Category = "";
+    return Post;
+}
+
 function getFormData($form) {
     const removeTag = new RegExp("(<[a-zA-Z0-9]+>)|(</[a-zA-Z0-9]+>)", "g");
     var jsonObject = {};

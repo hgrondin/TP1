@@ -21,7 +21,7 @@
     <div id="main">
         <div id="headerContainer">
             <div id="header">
-                <h4 id="actionTitle" class="titlePage text">Montréal Posts</h4>
+                <h4 class="titlePage text">Montréal Posts</h4>
                 <i class="cmdIcon fa fa-plus" id="createPost" title="Ajouter une publication"></i>
                 <i class="cmdIcon fa fa-times" id="abort" title="Annuler"></i>
                 <div class="dropdown ms-auto">
@@ -58,8 +58,8 @@
                                     </div>
                                 </div>
                                 <div class="iconsContainer">
-                                    <span class="fa fa-edit icon"></span>
-                                    <span class="fa fa-trash icon"></span>
+                                    <span class="cmdIcon fa fa-edit" title="Modifier la publication"></span>
+                                    <span class="cmdIcon fa fa-trash" title="Supprimer la publication"></span>
                                 </div>
                             </div>
                             <div class="imageAndDateContainer">
@@ -86,6 +86,24 @@
                         </div>
                     </div>
                 </div>
+                <div id="forms">
+                    <div id="postForm"></div>
+                    <div id="errorContainer" class="errorContainer"></div>
+                    <div id="aboutContainer" class="aboutContainer">
+                        <h2>Gestionnaire de favoris</h2>
+                        <hr>
+                        <p>
+                            Petite application de gestion de favoris à titre de démonstration
+                            d'interface utilisateur monopage réactive.
+                        </p>
+                        <p>
+                            Auteur: Nicolas Chourot
+                        </p>
+                        <p>
+                            Collège Lionel-Groulx, automne 2023
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -97,6 +115,7 @@
     <script src="js/pageManager.js"></script>
     <script src="js/API_Posts.js"></script>
     <script src="js/siteUI_copy.js"></script>
+    <script src="js/imageControl.js"></script>
 </body>
 
 </html>

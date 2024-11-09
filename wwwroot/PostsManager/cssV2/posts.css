@@ -97,5 +97,9 @@
     height: 100%;
 }
 
-
+#actionTitle {
+    text-align: center;
+    color: rgb(0, 89, 212);
+    margin-top: 30px;
+}
 
