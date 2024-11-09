@@ -61,15 +61,15 @@
 }
 
 .titlePage {
-    font-size: 50px;
-    color: rgb(0, 89, 212);;
+    font-size: 55px;
+    color: rgb(1, 73, 173);;
     margin: auto;
     /*font-weight: bold;*/
     font-family: "Tiro Telugu", serif;
     font-weight: 500;
     font-style: normal;
     text-decoration:underline;
-    padding-left: 10px;
+    padding-left: 80px;
 }
 
 #searchContainer {

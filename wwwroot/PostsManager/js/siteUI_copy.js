@@ -322,6 +322,8 @@ async function renderDeletePostForm(id) {
 }
 function renderPostForm(post = null) {
     $("#createPost").hide();
+    $("#searchContainer").hide();
+    $("#content").hide();
     $("#abort").show();
     eraseContent();
     let create = post == null;
@@ -332,9 +334,10 @@ function renderPostForm(post = null) {
     
     $("#postForm").show();
     $("#postForm").empty();
-    $("#content").append(`
+    $("#postForm").append(`
         <h2 id="actionTitle" class="text">${create ? "Création d'une publication" : "Modification d'une publication"}</h4>
-
+        <div class="scrollPost">
+        <div class="scrollPostV2">
         <form class="form" id="postForm">
             <input type="hidden" name="Id" value="${post.Id}"/>
 
@@ -378,9 +381,13 @@ function renderPostForm(post = null) {
                    waitingImage="Loading_icon.gif">
             </div>
             <hr>
+            <div class="addModifyPost">
             <input type="submit" value="Enregistrer" id="savePost" class="btn btn-primary">
             <input type="button" value="Annuler" id="cancel" class="btn btn-secondary">
+            </div>
         </form>
+        </div>
+        </div>
     `);
     initImageUploaders();
     initFormValidation(); // important do to after all html injection!

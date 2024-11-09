@@ -100,6 +100,37 @@
 #actionTitle {
     text-align: center;
     color: rgb(0, 89, 212);
-    margin-top: 30px;
+    margin-top: 50px;
+    margin-bottom: 20px;
 }
 
+.scrollPost {
+    height: auto;
+    /*overflow-x: hidden;
+    overflow-y: scroll;
+    overflow-y: auto;
+    scrollbar-gutter: stable;*/
+}
+
+.scrollPostV2 {
+    height: fit-content;
+    max-height: 70vh;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+}
+
+.addModifyPost {
+    text-align: center;
+}
+
+#savePost {
+    margin-right: 20px;
+    width: 100px;
+}
+
+#cancel {
+    margin-left: 20px;
+    width: 100px;
+}
