@@ -75,10 +75,10 @@ class PageManager {
     }
 
     //La méthode update() permet de gérer le contenu du scroll view.
-    async update(append = true) {
+    async update(append = true, isSearch = false) {
         this.storeScrollPosition();
         if (!append) this.itemsPanel.empty(); //Si on ajoute pas, on supprime tous les éléments enfant de l'élément relié à la variable itemsPanel.
-        let endOfData = await this.getItems(this.currentPageToQueryString(append)); //On va chercher les données selon une queryString.
+        let endOfData = await this.getItems(this.currentPageToQueryString(append), isSearch); //On va chercher les données selon une queryString.
         this.restoreScrollPosition();
         let instance = this;
         this.scrollPanel.scroll(function () {

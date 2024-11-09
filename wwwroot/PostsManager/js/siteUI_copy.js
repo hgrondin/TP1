@@ -4,6 +4,7 @@ let currentETag = "";
 let filters = {};
 let categories;
 let selectedCategory = "";
+let lastQueryString = "";
 
 setAllCategories();
 
@@ -24,7 +25,7 @@ async function Init_UI() {
     showPosts();
 
     $("#searchIcon").on("click", async function() {
-        pageManager.update(false);
+        pageManager.update(false, true);
     });
 
    // renderPosts();
@@ -95,10 +96,17 @@ function renderError(message) {
     );
 }
 
-async function renderPosts(queryString) {
-
-    queryString = buildQueryString(queryString);
-
+async function renderPosts(queryString, isSearch) {
+    if (isSearch) {
+        lastQueryString = buildQueryString(queryString);
+        queryString += lastQueryString;
+    } else {
+        if (lastQueryString === "") {
+            lastQueryString += "&sort=category";
+            queryString += "&sort=category";
+        } else
+            queryString += lastQueryString;
+    }
     /*queryString += "&sort=category";
 
     if (selectedCategory != "") 
@@ -467,11 +475,11 @@ function filterCategories() {
 }
 
 
-function buildQueryString(queryString){
+function buildQueryString(){
     filterKeywords();
     filterCategories();
 
-    queryString += "&sort=category&";
+    queryString = "&sort=category&";
     for (var key in filters){
         if (filters[key] != "")
             queryString += `${key}=${filters[key]}&`;
