@@ -1,10 +1,18 @@
 let contentScrollPosition = 0;
 let pageManager;
 let currentETag = "";
+let filters = {};
+let categories;
+let selectedCategory = "";
+
+setAllCategories();
 
 Init_UI();
 
 async function Init_UI() {
+    filterCategories();
+    filterKeywords("Test lolo");
+
     //renderPosts();
     itemLayout = {
         width: $("#sample").outerWidth(), //La longueur extérieur de l'élément
@@ -12,8 +20,13 @@ async function Init_UI() {
     };
 
     pageManager = new PageManager('scrollPanel', 'itemsPanel', itemLayout, renderPosts);
-    
+
     showPosts();
+
+    $("#searchIcon").on("click", async function() {
+        pageManager.update(false);
+    });
+
    // renderPosts();
    /* $('#createPost').on("click", async function () {
         saveContentScrollPosition();
@@ -83,6 +96,14 @@ function renderError(message) {
 }
 
 async function renderPosts(queryString) {
+
+    queryString = buildQueryString(queryString);
+
+    /*queryString += "&sort=category";
+
+    if (selectedCategory != "") 
+        queryString += "&category=" + selectedCategory;*/
+
     let response = await Posts_API.GetQuery(queryString);
 
     if (!Posts_API.error) { //S'il n'y a pas d'erreur, on peut continuer
@@ -90,7 +111,6 @@ async function renderPosts(queryString) {
         /*TO DO: Faire la gesiton avec le Etag (voir appUI.cs du projet Bookmarks2)*/
         //currentETag = response.ETag;
         let posts = response.data;
-
         let counter = 0;
         posts.forEach(post => {
             let words = post.Text.split(" ");
@@ -373,4 +393,89 @@ function getFormData($form) {
         jsonObject[control.name] = control.value.replace(removeTag, "");
     });
     return jsonObject;
+}
+
+async function setAllCategories() {
+    let categories = [];
+    let response = await Posts_API.GetQuery("?fields=category&sort=category");
+    if (!Posts_API.error) {
+        let items = response.data;
+        if (items != null) {
+            items.forEach(item => {
+                if (!categories.includes(item.Category))
+                    categories.push(item.Category);
+            })
+        }
+        updateSelectOfCategories(categories);
+    }
+}
+
+function updateSelectOfCategories(categories){
+    let select = $('#searchSelect');
+    select.empty();
+    let selected = false;
+    if (selectedCategory == "")
+        selected = true;
+
+    select.append($('<option> class="category"', {
+        value: "all",
+        text: "Toutes les catégories",
+        selected
+    }));
+
+    categories.forEach(category => {
+        let selected = false;
+        if (selectedCategory === category)
+            selected = true;
+        select.append($('<option> class="category"', {
+            value: category,
+            text: category,
+            selected
+        }));
+    });
+
+    $('#searchSelect').on("change", function () {
+        let val = $("#searchSelect").find(":selected").val().trim();
+        selectedCategory = "";
+        if (val !== "all")            
+            selectedCategory = val;
+    });
+}
+
+
+function filterKeywords() {
+    let searchValue = $("#searchBar").val();
+
+    let keywordsTab = searchValue.trim().split(" ");
+    if (keywordsTab.length == 0){ //searchValue was empty
+        if ("keywords" in filters){ //Check if "keywords" key was in the filters object
+            delete filters[keywords];
+        }
+    }
+    let keywords = "";
+    keywordsTab.forEach(function(keyword){
+        keywords += keyword + ",";
+    });
+    keywords = keywords.slice(0, -1); //Remove last ','
+    filters["keywords"] = keywords;
+
+    //renderPosts(buildQueryString());
+}
+
+function filterCategories() {
+    filters["category"] = selectedCategory;
+}
+
+
+function buildQueryString(queryString){
+    filterKeywords();
+    filterCategories();
+
+    queryString += "&sort=category&";
+    for (var key in filters){
+        if (filters[key] != "")
+            queryString += `${key}=${filters[key]}&`;
+    }
+    queryString = queryString.slice(0, -1); //Remove last '&'
+    return queryString;
 }
