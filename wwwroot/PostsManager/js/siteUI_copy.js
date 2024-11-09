@@ -53,9 +53,9 @@ function renderAbout() {
 
 
 function showPosts() {
-    /*$("#actionTitle").text("Liste de publications");
+    $("#actionTitle").text("MONTRÉAL POSTS");
     $("#createPost").show();
-    $("#abort").hide();  */
+    $("#abort").hide();  
     $("#scrollPanel").show();
 }
 function showWaitingGif() {

@@ -39,26 +39,90 @@
 
 }
 
+#headerContainer {
+    border: 2px solid #8b8b8b;
+    border-radius: 9px;
+    padding-bottom: 8px;
+    padding-top: 4px;
+    padding-left: 4px;
+    padding-right: 4px;
+    height: 100%;
+}
+
 #header {
-    border: 1px solid #ccc;
+    border: 2px solid #7e7e7e;
     border-radius: 9px;
     background-color: white;
     display: grid;
-    grid-template-columns: 50px auto 50px 30px;
+    grid-template-columns: auto 30px 30px;
     width: 100%;
-    height: 60px;
+    height: 70px;
     align-items: center;
     padding: 8px;
+    gap: 10px;
+}
+
+.titlePage {
+    font-size: 50px;
+    color: rgb(0, 89, 212);;
+    margin: auto;
+    /*font-weight: bold;*/
+    font-family: "Tiro Telugu", serif;
+    font-weight: 500;
+    font-style: normal;
+    text-decoration:underline;
+
+}
+
+#searchContainer {
+    max-width: 100%;
+    display: grid;
+    grid-template-columns: 40px auto auto;
+    align-items: top;
+    gap: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border: 1px solid #a4a4a4;
+    border-radius: 9px;
+    margin-top: 10px;
+}
+
+#searchContainer input {
+    margin-bottom: 0px !important;
+}
+
+#searchContainer i {
+    text-align: left;
+}
+
+#searchBar {
+    margin-left: -10px;
+}
+
+
+.hrPost {
+    margin: auto;
+    width: 98%;
+    margin-top: 20px;
+    margin-bottom: -18px;
+    border: 1px solid rgb(0, 106, 255);
+    opacity: 100%;
 }
 
 #content {
-    height: 1px;
+    height: 100rem;
+    /*height: 1px;*/
     flex:1;
-    border: 1px solid #ccc;
-    border-radius: 9px;
+    border: 2px solid #a4a4a4;
+    /*border: 1px solid #ccc;
+    border-radius: 9px;*/
     width: 100%;
     background-color: white;
-    padding-bottom: 8px; 
+    margin-top: 40px;
+    /*padding: 4px;*/
+    /*padding-bottom: 8px; */
 }
 
 #forms {
@@ -106,12 +170,13 @@
 }
 
 .cmdIcon {
-    font-size: 1.5rem;
+    font-size: 2.0rem;
     -webkit-text-stroke-color: white;
-    -webkit-text-fill-color: rgb(0, 87, 204);
+    -webkit-text-fill-color: rgb(0, 106, 255);
     text-align: center;
     margin: 8px;
     cursor: pointer;
+    padding-left: 0px;
 }
 
 .menuIcon {
