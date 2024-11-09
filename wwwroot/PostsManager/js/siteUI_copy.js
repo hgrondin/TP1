@@ -341,8 +341,9 @@ function renderPostForm(post = null) {
         <h2 id="actionTitle" class="text">${create ? "Création d'une publication" : "Modification d'une publication"}</h4>
         <div class="scrollPost">
         <div class="scrollPostV2">
-        <form class="form" id="postForm">
+        <form class="form" id="thePostForm">
             <input type="hidden" name="Id" value="${post.Id}"/>
+            <input type="hidden" name="Creation" value="${Date.now()}"/>
 
             <label for="Title" class="form-label">Titre </label>
             <input 
@@ -393,14 +394,14 @@ function renderPostForm(post = null) {
         </div>
     `);
     initImageUploaders();
-    //initFormValidation(); // important do to after all html injection!
-    $('#postForm').on("submit", async function (event) {
+    initFormValidation(); // important do to after all html injection!
+    $('#thePostForm').on("submit", async function (event) {
         event.preventDefault();
-        let post = getFormData($("#postForm"));
+        let post = getFormData($("#thePostForm"));
         showWaitingGif();
-        let result = await API_SavePost(post, create);
+        let result = await Posts_API.Save(post, create);
         if (result)
-            renderPosts();
+            showPosts();
         else
             renderError("Une erreur est survenue! " + API_getcurrentHttpError());
     });
