@@ -6,6 +6,19 @@ let categories;
 let selectedCategory = "";
 let lastQueryString = "";
 
+let waiting = null;
+let waitingGifTrigger = 2000;
+function addWaitingGif() {
+    clearTimeout(waiting);
+    waiting = setTimeout(() => {
+        $("#itemsPanel").append($("<div id='waitingGif' class='waitingGifcontainer'><img class='waitingGif' src='Loading_icon.gif' /></div>'"));
+    }, waitingGifTrigger)
+}
+function removeWaitingGif() {
+    clearTimeout(waiting);
+    $("#waitingGif").remove();
+}
+
 setAllCategories();
 
 Init_UI();
@@ -158,6 +171,16 @@ async function renderPosts(queryString, isSearch) {
 
             counter++;
         });
+
+        $(".editCmd").off();
+        $(".editCmd").on("click", function () {
+            renderEditPostForm($(this).attr("editPostId"));
+        });
+        $(".deleteCmd").off();
+        $(".deleteCmd").on("click", function () {
+            renderDeletePostForm($(this).attr("deletePostId"));
+        });
+
         /*
         for (let i = 0; i < 5; i++) {
             $("#itemsPanel").append(renderPost(i));
@@ -213,8 +236,8 @@ function renderPost(post, textDescription, descriptionPostId, wordsLengthMore) {
                     </div>
                 </div>
                 <div class="iconsContainer">
-                    <span class="cmdIcon fa fa-edit" title="Modifier la publication"></span>
-                    <span class="cmdIcon fa fa-trash" title="Supprimer la publication"></span>
+                    <span class="cmdIcon fa fa-edit editCmd" title="Modifier la publication" editPostId="${post.Id}"></span>
+                    <span class="cmdIcon fa fa-trash deleteCmd" title="Supprimer la publication" deletePostId="${post.Id}"></span>
                 </div>
             </div>
             <div class="imageAndDateContainer">
@@ -280,7 +303,18 @@ function renderCreatePostForm() {
     renderPostForm();
 }
 async function renderEditPostForm(id) {
-    // TODO
+    addWaitingGif();
+    let response = await Posts_API.Get(id)
+    if (!Posts_API.error) {
+        let Post = response.data;
+        if (Post !== null)
+            renderPostForm(Post);
+        else
+            renderError("Post introuvable!");
+    } else {
+        renderError(Posts_API.currentHttpError);
+    }
+    removeWaitingGif();
 }
 async function renderDeletePostForm(id) {
     showWaitingGif();
@@ -358,14 +392,13 @@ function renderPostForm(post = null) {
             />
             <label for="Text" class="form-label">Contenu </label>
             <textarea
-                class="form-control Text"
+                class="form-control Text textAreaDescriptionPost"
                 name="Text"
                 id="Text"
                 placeholder="Contenu de la publication"
                 required
-                RequireMessage="Veuillez entrer le contenu de la publication" 
-                value="" 
-            ></textarea>
+                RequireMessage="Veuillez entrer le contenu de la publication"                 
+            >${post.Text}</textarea>
             <label for="Category" class="form-label">Catégorie </label>
             <input
                 class="form-control"
@@ -400,10 +433,12 @@ function renderPostForm(post = null) {
         let post = getFormData($("#thePostForm"));
         showWaitingGif();
         let result = await Posts_API.Save(post, create);
-        if (result)
+        if (result) {
             showPosts();
+           /* pageManager.scrollToElem(Bookmark.Id);*/
+        }
         else
-            renderError("Une erreur est survenue! " + API_getcurrentHttpError());
+            renderError("Une erreur est survenue! ");
     });
     $('#cancel').on("click", function () {
         showPosts();

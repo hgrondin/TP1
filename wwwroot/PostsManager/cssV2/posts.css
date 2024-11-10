@@ -134,3 +134,9 @@
     margin-left: 20px;
     width: 100px;
 }
+
+.textAreaDescriptionPost {
+    height: 300px;
+    max-height: 500px;
+    margin-bottom: 20px;
+}

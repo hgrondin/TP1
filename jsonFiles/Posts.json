@@ -1,18 +1,1 @@
-[
-    {
-        "Id": "943c4640-9d74-11ef-be7d-bda18e2bf16c",
-        "Title": "Explosion de l'immigration permanente au Québec: un seuil de 67 000 prévu l’an prochain",
-        "Text": "Le ministre de l’Immigration, Jean-François Roberge, a déposé ce matin son plan annuel d’immigration. Les chiffres dévoilés indiquent que le Québec accueillera en 2025 entre 64 000 et 67 000 nouveaux arrivants permanents, soit environ 10 000 de plus que cette année.",
-        "Category": "Immigration",
-        "Image": "943cbb70-9d74-11ef-be7d-bda18e2bf16c.webp",
-        "Creation": 0
-    },
-    {
-        "Id": "056bf3b0-9d75-11ef-be7d-bda18e2bf16c",
-        "Title": "Trump menace le financement canadien des usines de batteries",
-        "Text": "L'élection de Donald Trump aux États-Unis pourrait faire perdre des milliards de dollars à Northvolt, au Québec, ainsi qu'aux projets d'usines de batteries de Volkswagen et de Stellantis-LG (NextStar), en Ontario. Les gouvernements fédéral et provinciaux devraient en effet retirer ses subventions à la production si les États-Unis font de même. Et c'est justement l'intention du président américain désigné.C'est le principe du miroir. Le gouvernement reflète ce qui se fait de l'autre côté de la frontière. Si Washington augmente ses aides publiques à l'industrie de la batterie dans le cadre de l'Inflation Reduction Act (IRA), Ottawa les augmente. Si Washington les diminue, Ottawa les diminue. Si Washington les coupe, Ottawa les coupe.",
-        "Category": "Economie",
-        "Image": "056c1ac0-9d75-11ef-be7d-bda18e2bf16c.webp",
-        "Creation": 0
-    }
-]
+[{"Id":"943c4640-9d74-11ef-be7d-bda18e2bf16c","Title":"Explosion de l'immigration permanente au Québec: un seuil de 67 000 prévu l’an prochain","Text":"Le ministre de l’Immigration, Jean-François Roberge, a déposé ce matin son plan annuel d’immigration. Les chiffres dévoilés indiquent que le Québec accueillera en 2025 entre 64 000 et 67 000 nouveaux arrivants permanents, soit environ 10 000 de plus que cette année.","Category":"Immigration","Image":"943cbb70-9d74-11ef-be7d-bda18e2bf16c.webp","Creation":0},{"Id":"056bf3b0-9d75-11ef-be7d-bda18e2bf16c","Creation":1731200683584,"Title":"Trump menace le financement canadien des usines de batteries","Text":"L'élection de Donald Trump aux États-Unis pourrait faire perdre des milliards de dollars à Northvolt, au Québec, ainsi qu'aux projets d'usines de batterie\r\nLes gouvernements fédéral et provinciaux devraient en effet retirer ses subventions à la production si les États-Unis font de même. Et c'est justement l'intention du président américain désigné.C'est le principe du miroir. Le gouvernement reflète ce qui se fait de l'autre côté de la frontière. Si Washington augmente ses aides publiques à l'industrie de la batterie dans le cadre de l'Inflation Reduction Act (IRA), Ottawa les augmente. Si Washington les diminue, Ottawa les diminue. Si Washington les coupe, Ottawa les coupe.","Category":"Economie","Image":"c1fb84b0-9eff-11ef-84fb-d99cdcd6c3e7.webp"}]
