@@ -265,7 +265,7 @@ function renderPost(post, textDescription, descriptionPostId, wordsLengthMore, v
 
             </div>
             <div>
-                <p class="dateLastModificationPost text">Jeudi 31 octobre 2024 - 12:22:18</p>
+                <p class="dateLastModificationPost text">${convertToFrenchDate(post.Creation)}</p>
             </div>
             <div>
                 ${elementsWordsLengthMore}                
@@ -585,4 +585,22 @@ function buildQueryString(){
     }
     queryString = queryString.slice(0, -1); //Remove last '&'
     return queryString;
+}
+
+
+function convertToFrenchDate(numeric_date) {
+    date = new Date(numeric_date);
+    var options = { year: 'numeric', month: 'long', day: 'numeric' };
+    var opt_weekday = { weekday: 'long' };
+    var weekday = toTitleCase(date.toLocaleDateString("fr-FR", opt_weekday));
+
+    function toTitleCase(str) {
+        return str.replace(
+            /\w\S*/g,
+            function (txt) {
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            }
+        );
+    }
+    return weekday + " le " + date.toLocaleDateString("fr-FR", options) + " - " + date.toLocaleTimeString("fr-FR");
 }
