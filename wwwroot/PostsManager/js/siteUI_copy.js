@@ -28,7 +28,6 @@ async function Init_UI() {
     filterCategories();
     filterKeywords("Test lolo");
 
-    //renderPosts();
     itemLayout = {
         width: $("#sample").outerWidth(), //La longueur extérieur de l'élément
         height: $("#sample").outerHeight() //La hauteur extérieur de l'élément
@@ -220,7 +219,7 @@ async function renderPosts(queryString, isSearch) {
 }
 
 function renderError(message) {
-    hideBookmarks();
+    hideBookmarks(); /* ------------------------------------------------ REVOIR ------------------------------------------------ */
     /*$("#actionTitle").text("Erreur du serveur...");*/
     $("#errorContainer").show();
     $("#errorContainer").append($(`<div>${message}</div>`));

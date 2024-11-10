@@ -114,7 +114,7 @@
 
 .scrollPostV2 {
     height: fit-content;
-    max-height: 70vh;
+    max-height: 150vh;
     overflow-x: hidden;
     overflow-y: scroll;
     overflow-y: auto;
@@ -158,4 +158,49 @@
 
 .textNoPostPoundContainer {
     padding: 20px;
+}
+
+
+
+
+@media screen and (max-height:1100px) {
+
+    .scrollPostV2 {
+        max-height: 80vh;
+    }
+}
+
+@media screen and (max-height:1000px) {
+
+    .scrollPostV2 {
+        max-height: 75vh;
+    }
+}
+
+@media screen and (max-height:900px) {
+
+    .scrollPostV2 {
+        max-height: 70vh;
+    }
+}
+
+@media screen and (max-height:700px) {
+
+    .scrollPostV2 {
+        max-height: 66vh;
+    }
+}
+
+@media screen and (max-height:600px) {
+
+    .scrollPostV2 {
+        max-height: 59vh;
+    }
+}
+
+@media screen and (max-height:500px) {
+
+    .scrollPostV2 {
+        max-height: 54vh;
+    }
 }
