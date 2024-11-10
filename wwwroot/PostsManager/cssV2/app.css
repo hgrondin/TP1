@@ -263,6 +263,22 @@
     }
 }
 
+@media screen and (max-width:600px) {
+
+    .titlePage {
+        font-size: 40px;
+        padding-left: 0px;
+    }
+}
+
+@media screen and (max-width:400px) {
+
+    .titlePage {
+        font-size: 30px;
+        padding-left: 0px;
+    }
+}
+
 form {
     padding: 20px;
     max-width: 350px;

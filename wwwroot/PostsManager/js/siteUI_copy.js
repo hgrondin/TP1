@@ -415,7 +415,7 @@ function renderPostForm(post = null) {
         <div class="scrollPostV2">
         <form class="form" id="thePostForm">
             <input type="hidden" name="Id" value="${post.Id}"/>
-            <input type="hidden" name="Creation" value="${new Date().getTime()}"/>
+            <input type="hidden" name="Creation" value=""/>
 
             <label for="Title" class="form-label">Titre </label>
             <input 
@@ -469,6 +469,7 @@ function renderPostForm(post = null) {
     $('#thePostForm').on("submit", async function (event) {
         event.preventDefault();
         let post = getFormData($("#thePostForm"));
+        post["Creation"] = new Date().getTime();
         showWaitingGif();
         let result = await Posts_API.Save(post, create);
         if (result) {
