@@ -416,7 +416,7 @@ function renderPostForm(post = null) {
         <div class="scrollPostV2">
         <form class="form" id="thePostForm">
             <input type="hidden" name="Id" value="${post.Id}"/>
-            <input type="hidden" name="Creation" value="${Date.now()}"/>
+            <input type="hidden" name="Creation" value="${new Date().getTime()}"/>
 
             <label for="Title" class="form-label">Titre </label>
             <input 
@@ -589,7 +589,7 @@ function buildQueryString(){
 
 
 function convertToFrenchDate(numeric_date) {
-    date = new Date(numeric_date);
+    let date = new Date(numeric_date);
     var options = { year: 'numeric', month: 'long', day: 'numeric' };
     var opt_weekday = { weekday: 'long' };
     var weekday = toTitleCase(date.toLocaleDateString("fr-FR", opt_weekday));
