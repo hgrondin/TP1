@@ -140,3 +140,22 @@
     max-height: 500px;
     margin-bottom: 20px;
 }
+
+.textNoPostPound {
+    font-size: 25px;
+}
+
+.textNoPostPound_BoldPart {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.textNoPostPound_FilterInfosPart {
+    font-size: 25px;
+    font-weight: bold;
+    color: rgb(0, 89, 212);
+}
+
+.textNoPostPoundContainer {
+    padding: 20px;
+}

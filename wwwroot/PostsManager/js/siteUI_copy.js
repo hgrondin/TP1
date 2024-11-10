@@ -5,6 +5,7 @@ let filters = {};
 let categories;
 let selectedCategory = "";
 let lastQueryString = "";
+let postsLastSearch;
 
 let waiting = null;
 let waitingGifTrigger = 2000;
@@ -138,6 +139,7 @@ async function renderPosts(queryString, isSearch) {
         //currentETag = response.ETag;
         let posts = response.data;
         let counter = 0;
+        if (posts.length > 0) {
         posts.forEach(post => {
             let words = post.Text.split(" ");
             let text = post.Text;
@@ -197,6 +199,9 @@ async function renderPosts(queryString, isSearch) {
                 $("#itemsPanel").append(renderPost());
             });
         }*/
+        } else {
+            $("#itemsPanel").append(renderPost(null, "", 0, false, filters["keywords"], filters["category"], isSearch));
+        }
     }
 
     return false;
@@ -207,27 +212,27 @@ async function renderPosts(queryString, isSearch) {
     }*/
 }
 
-function renderPost(post, textDescription, descriptionPostId, wordsLengthMore) {
+function renderPost(post, textDescription, descriptionPostId, wordsLengthMore, valueSearchBar = "", valueCategory = "", isSearch = false) {
+    if (post !== null) {
+        let elementsWordsLengthMore;
 
-    let elementsWordsLengthMore;
+        if (wordsLengthMore) {
+            elementsWordsLengthMore = `<p class="descriptionPost text" completeDescription="${descriptionPostId}" style="display: none">
+                                            ${post.Text}                 
+                                        </p>
+                                        <p class="descriptionPost text" descriptionPostId="${descriptionPostId}">
+                                            ${textDescription}...
+                                        </p>
+                                        <p class="seeMoreDescriptionPost seeMore" seeMore="${descriptionPostId}">Voir plus</p>
+                                        `;
+        } else {
+            elementsWordsLengthMore = `<p class="descriptionPost text">
+                                            ${textDescription}                 
+                                        </p>`;
+        }
 
-    if (wordsLengthMore) {
-        elementsWordsLengthMore = `<p class="descriptionPost text" completeDescription="${descriptionPostId}" style="display: none">
-                                        ${post.Text}                 
-                                    </p>
-                                    <p class="descriptionPost text" descriptionPostId="${descriptionPostId}">
-                                        ${textDescription}...
-                                    </p>
-                                    <p class="seeMoreDescriptionPost seeMore" seeMore="${descriptionPostId}">Voir plus</p>
-                                    `;
-    } else {
-        elementsWordsLengthMore = `<p class="descriptionPost text">
-                                        ${textDescription}                 
-                                    </p>`;
-    }
-
-    return $(`
-<div class="postContainer">
+        return $(`
+        <div class="postContainer">
             <div class="globalTopInformationsContainer">
                 <div class="topInformationsContainer">
                     <p class="categoryPost text">${post.Category.toUpperCase()}</p>
@@ -253,7 +258,27 @@ function renderPost(post, textDescription, descriptionPostId, wordsLengthMore) {
                 <!--<p class="descriptionPost text">Le ministre de l’Immigration, Jean-François Roberge, a déposé ce matin son plan annuel d’immigration.</p>-->
             </div>
         </div>
-    `);
+        `);
+    } else {
+        if (valueSearchBar !== "" && isSearch) {
+            valueSearchBar = valueSearchBar.replaceAll(",", " ");
+
+            let category = valueCategory;
+
+            if (category === "")
+                category = "Toutes les catégories"
+            return $(`
+                <div class="textNoPostPoundContainer">
+                    <span class="text textNoPostPound_BoldPart">Aucun résulat</span>
+                    <span class="text textNoPostPound">trouvé pour les valeurs:</span>
+                    <span class="text textNoPostPound_FilterInfosPart"> "${valueSearchBar}" </span>
+                    <span class="text textNoPostPound"> et la catégorie:</span>
+                    <span class="text textNoPostPound_FilterInfosPart"> "${category}"</span>
+                    <span class="text textNoPostPound">.</span>
+                </div>
+            `);
+        }
+    }
 }
 
 
