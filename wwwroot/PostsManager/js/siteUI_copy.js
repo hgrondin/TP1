@@ -116,6 +116,8 @@ function renderError(message) {
 }
 
 async function renderPosts(queryString, isSearch) {
+    let endOfData = false;
+
     if (isSearch) {
         lastQueryString = buildQueryString(queryString);
         queryString += lastQueryString;
@@ -126,6 +128,8 @@ async function renderPosts(queryString, isSearch) {
         } else
             queryString += lastQueryString;
     }
+    addWaitingGif();
+
     /*queryString += "&sort=category";
 
     if (selectedCategory != "") 
@@ -140,76 +144,86 @@ async function renderPosts(queryString, isSearch) {
         let posts = response.data;
         let counter = 0;
         if (posts.length > 0) {
-        posts.forEach(post => {
-            let words = post.Text.split(" ");
-            let text = post.Text;
-            let wordsLengthMore = false;
-            if (words.length > 30) {
-                let wordsCount = 0;
-                let indexWord = 0;
-                for (let i = 0; i < post.Text.length; i++) {
-                    if (post.Text[i] == " ") {
-                        if (wordsCount+1 == 30) {
-                            indexWord = i;
-                            break;
+            posts.forEach(post => {
+                let words = post.Text.split(" ");
+                let text = post.Text;
+                let wordsLengthMore = false;
+                if (words.length > 30) {
+                    let wordsCount = 0;
+                    let indexWord = 0;
+                    for (let i = 0; i < post.Text.length; i++) {
+                        if (post.Text[i] == " ") {
+                            if (wordsCount+1 == 30) {
+                                indexWord = i;
+                                break;
+                            }
+                            wordsCount++;
                         }
-                        wordsCount++;
                     }
+                    text = post.Text.substr(0, indexWord);
+                    wordsLengthMore = true;
                 }
-                text = post.Text.substr(0, indexWord);
-                wordsLengthMore = true;
-            }
 
-            $("#itemsPanel").append(renderPost(post, text, counter, wordsLengthMore));
+                $("#itemsPanel").append(renderPost(post, text, counter, wordsLengthMore));
 
-            if (wordsLengthMore) {
+                if (wordsLengthMore) {
+                    $(".seeMoreDescriptionPost").on("click", function() {
+                        let id = $(this).attr("seeMore");
+                        $('[completeDescription="'+id+'"]').show();
+                        $('[descriptionPostId="'+id+'"]').hide();
+                        $(this).hide();
+                    });
+                }          
+
+                counter++;
+            });
+
+            $(".editCmd").off();
+            $(".editCmd").on("click", function () {
+                renderEditPostForm($(this).attr("editPostId"));
+            });
+            $(".deleteCmd").off();
+            $(".deleteCmd").on("click", function () {
+                renderDeletePostForm($(this).attr("deletePostId"));
+            });
+
+            /*
+            for (let i = 0; i < 5; i++) {
+                $("#itemsPanel").append(renderPost(i));
                 $(".seeMoreDescriptionPost").on("click", function() {
-                    let id = $(this).attr("seeMore");
-                    $('[completeDescription="'+id+'"]').show();
-                    $('[descriptionPostId="'+id+'"]').hide();
+                    $('[descriptionPostId="'+i+'"]').text(descriptionTest);
                     $(this).hide();
                 });
-            }          
+            }*/
 
-            counter++;
-        });
-
-        $(".editCmd").off();
-        $(".editCmd").on("click", function () {
-            renderEditPostForm($(this).attr("editPostId"));
-        });
-        $(".deleteCmd").off();
-        $(".deleteCmd").on("click", function () {
-            renderDeletePostForm($(this).attr("deletePostId"));
-        });
-
-        /*
-        for (let i = 0; i < 5; i++) {
-            $("#itemsPanel").append(renderPost(i));
-            $(".seeMoreDescriptionPost").on("click", function() {
-                $('[descriptionPostId="'+i+'"]').text(descriptionTest);
-                $(this).hide();
-            });
-        }*/
-
-        showPosts();
-/*
-        if (Posts.length > 0) {
-            Posts.forEach(Post => {
-                $("#itemsPanel").append(renderPost());
-            });
-        }*/
+            /*
+            if (Posts.length > 0) {
+                Posts.forEach(Post => {
+                    $("#itemsPanel").append(renderPost());
+                });
+            }*/
         } else {
+            endOfData = true;
+
             $("#itemsPanel").append(renderPost(null, "", 0, false, filters["keywords"], filters["category"], isSearch));
         }
+    } else {
+        renderError(Posts_API.currentHttpError);
     }
+    removeWaitingGif();
 
-    return false;
-
+    return endOfData;
 
    /* for (let i = 0; i < 5; i++) {
         $("#itemsPanel").append(renderPost());
     }*/
+}
+
+function renderError(message) {
+    hideBookmarks();
+    /*$("#actionTitle").text("Erreur du serveur...");*/
+    $("#errorContainer").show();
+    $("#errorContainer").append($(`<div>${message}</div>`));
 }
 
 function renderPost(post, textDescription, descriptionPostId, wordsLengthMore, valueSearchBar = "", valueCategory = "", isSearch = false) {
