@@ -43,6 +43,11 @@ async function Init_UI() {
     $("#searchIcon").on("click", async function() {
         pageManager.update(false, true);
     });
+    $("#searchBar").on("keydown", async function(ev) {
+        if (ev.key === 'Enter'){
+            pageManager.update(false, true);
+        }
+    });
 
    // renderPosts();
     $('#createPost').on("click", async function () {
@@ -590,8 +595,6 @@ function filterKeywords() {
     });
     keywords = keywords.slice(0, -1); //Remove last ','
     filters["keywords"] = keywords;
-
-    //renderPosts(buildQueryString());
 }
 
 function filterCategories() {
