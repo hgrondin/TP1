@@ -368,7 +368,7 @@ async function renderEditPostForm(id) {
     removeWaitingGif();
 }
 async function renderDeletePostForm(id) {
-    showWaitingGif();
+    addWaitingGif();
     hold_Periodic_Refresh = true;
     $("#createPost").hide();
     $("#searchContainer").hide();
