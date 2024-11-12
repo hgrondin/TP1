@@ -57,6 +57,8 @@ async function Init_UI() {
     $('#aboutCmd').on("click", function () {
         renderAbout();
     });*/
+
+    start_Periodic_Refresh();
 }
 
 function renderAbout() {
@@ -402,12 +404,12 @@ async function renderDeletePostForm(id) {
                 showWaitingGif();
                 let result = await Posts_API.Delete(post.Id);
                 if (result)
-                    renderPosts();
+                    showPosts();
                 else
                     renderError("Une erreur est survenue!");
             });
             $('#cancel').on("click", function () {
-                renderPosts();
+                showPosts();
             });
         }
         else {
@@ -626,4 +628,18 @@ function convertToFrenchDate(numeric_date) {
         );
     }
     return weekday + " le " + date.toLocaleDateString("fr-FR", options) + " - " + date.toLocaleTimeString("fr-FR");
+}
+
+function start_Periodic_Refresh() {
+    setInterval(async () => {
+        if (!hold_Periodic_Refresh) {
+            let etag = await Posts_API.HEAD();
+            if (currentETag != etag) {
+                currentETag = etag;
+                await pageManager.update(false);
+                setAllCategories();
+            }
+        }
+    },
+        periodicRefreshPeriod * 1000);
 }
