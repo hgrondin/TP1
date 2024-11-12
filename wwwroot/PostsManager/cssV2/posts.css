@@ -160,8 +160,26 @@
     padding: 20px;
 }
 
+.deletePostImageContainer {
+    display: flex;
+    width: 80%;
+    height: 40vh;
+    flex-direction: column;
+    margin: 0 auto;
+}
 
+.descriptionPostDeleteForm{
+    font-size: 18px;
+    margin: 15px;
+    text-align: center;
+}
 
+.categoryPostDeleteForm {
+    font-weight: bold;
+    font-size: 18px;
+    color: rgb(0, 106, 255);
+    text-align: center;
+}
 
 @media screen and (max-height:1100px) {
 

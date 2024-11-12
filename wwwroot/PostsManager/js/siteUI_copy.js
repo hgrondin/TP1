@@ -1,3 +1,5 @@
+const periodicRefreshPeriod = 10;
+let hold_Periodic_Refresh = false;
 let contentScrollPosition = 0;
 let pageManager;
 let currentETag = "";
@@ -58,6 +60,7 @@ async function Init_UI() {
 }
 
 function renderAbout() {
+    hold_Periodic_Refresh = true;
     saveContentScrollPosition();
     eraseContent();
     $("#createPost").hide();
@@ -82,13 +85,14 @@ function renderAbout() {
 }
 
 
-function showPosts() {    
+function showPosts() {
     $("#createPost").show();
     $("#abort").hide();  
     $("#scrollPanel").show();
     $("#postForm").hide();
     $("#content").show();
     $("#searchContainer").show();
+    hold_Periodic_Refresh = false;
 }
 function showWaitingGif() {
     eraseContent();
@@ -104,6 +108,7 @@ function restoreContentScrollPosition() {
     $("#content")[0].scrollTop = contentScrollPosition;
 }
 function renderError(message) {
+    hold_Periodic_Refresh = true;
     eraseContent();
     $("#content").append(
         $(`
@@ -219,6 +224,7 @@ async function renderPosts(queryString, isSearch) {
 }
 
 function renderError(message) {
+    hold_Periodic_Refresh = true;
     hideBookmarks(); /* ------------------------------------------------ REVOIR ------------------------------------------------ */
     /*$("#actionTitle").text("Erreur du serveur...");*/
     $("#errorContainer").show();
@@ -356,47 +362,64 @@ async function renderEditPostForm(id) {
 }
 async function renderDeletePostForm(id) {
     showWaitingGif();
+    hold_Periodic_Refresh = true;
     $("#createPost").hide();
+    $("#searchContainer").hide();
+    $("#content").hide();
     $("#abort").show();
-    $("#actionTitle").text("Retrait d'une publication");
-    let post = await API_GetPost(id);
-    eraseContent();
-    if (post !== null) {
-        $("#content").append(`
-        <div class="postdeleteForm">
-            <h4>Effacer la publication suivante?</h4>
-            <br>
-            <div class="postRow" post_id=${post.Id}">
-                <div class="postContainer">
-                    <div class="postLayout">
-                        <div class="postTitle">${post.Title}</div>
-                        <div class="postText">${post.Text}</div>
-                        <div class="postCategory">${post.Category}</div>
-                        <div class="postImage">${post.Image}</div>
+    $("#postForm").show();
+    $("#postForm").empty();
+
+    let res = await Posts_API.Get(id);
+    if (!Posts_API.error){
+        let post = res.data;
+        if (post !== null) {
+            $("#postForm").append(`
+                <h2 id="actionTitle" class="text">Effacer cette publciation?</h2>
+                <div class="scrollPost">
+                    <div class="scrollPostV2">
+                            <input type="hidden" name="Id" value="${post.Id}"/>
+
+                            <div class="titlePostContainer" style="text-align: center !important;">${post.Title}</div>
+                            
+                            <div class="deletePostImageContainer">
+                                <div class="imagePost" style="background-image:url('${post.Image}')"></div>
+                            </div>
+                            
+                            <div class="descriptionPostDeleteForm text">
+                                ${post.Text}
+                            </div>
+                            
+                            <hr>
+                            <div class="addModifyPost">
+                            <input type="submit" value="Supprimer" id="deletePost" class="btn btn-primary">
+                            <input type="button" value="Annuler" id="cancel" class="btn btn-secondary">
+                            </div>
                     </div>
-                </div>  
-            </div>   
-            <br>
-            <input type="button" value="Effacer" id="deletePost" class="btn btn-primary">
-            <input type="button" value="Annuler" id="cancel" class="btn btn-secondary">
-        </div>    
-        `);
-        $('#deletePost').on("click", async function () {
-            showWaitingGif();
-            let result = await API_DeletePost(post.Id);
-            if (result)
+                </div> 
+            `);
+            $('#deletePost').on("click", async function () {
+                showWaitingGif();
+                let result = await Posts_API.Delete(post.Id);
+                if (result)
+                    renderPosts();
+                else
+                    renderError("Une erreur est survenue!");
+            });
+            $('#cancel').on("click", function () {
                 renderPosts();
-            else
-                renderError("Une erreur est survenue!");
-        });
-        $('#cancel').on("click", function () {
-            renderPosts();
-        });
-    } else {
-        renderError("Publication introuvable!");
+            });
+        }
+        else {
+            renderError("Publication introuvable!");
+        }
+    }
+    else{
+        renderError(Posts_API.currentHttpError);
     }
 }
 function renderPostForm(post = null) {
+    hold_Periodic_Refresh = true;
     $("#createPost").hide();
     $("#searchContainer").hide();
     $("#content").hide();
