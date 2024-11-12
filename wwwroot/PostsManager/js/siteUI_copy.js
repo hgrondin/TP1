@@ -1,3 +1,4 @@
+import {Posts_API} from './API_Posts.js';
 const periodicRefreshPeriod = 10;
 let hold_Periodic_Refresh = false;
 let contentScrollPosition = 0;
@@ -30,7 +31,7 @@ async function Init_UI() {
     filterCategories();
     filterKeywords("Test lolo");
 
-    itemLayout = {
+    let itemLayout = {
         width: $("#sample").outerWidth(), //La longueur extérieur de l'élément
         height: $("#sample").outerHeight() //La hauteur extérieur de l'élément
     };
@@ -108,6 +109,12 @@ function showWaitingGif() {
 function eraseContent() {
     $("#content").empty();
 }
+function hidePosts(){
+    $("#content").hide();
+}
+function hidePostForm(){
+    $("#postForm").hide();
+}
 function saveContentScrollPosition() {
     contentScrollPosition = $("#content")[0].scrollTop;
 }
@@ -116,14 +123,10 @@ function restoreContentScrollPosition() {
 }
 function renderError(message) {
     hold_Periodic_Refresh = true;
-    eraseContent();
-    $("#content").append(
-        $(`
-            <div class="errorContainer">
-                ${message}
-            </div>
-        `)
-    );
+    hidePosts();
+    hidePostForm();
+    $("#errorContainer").show();
+    $("#errorContainer").append($(`<div>${message}</div>`));
 }
 
 async function renderPosts(queryString, isSearch) {
@@ -222,20 +225,13 @@ async function renderPosts(queryString, isSearch) {
         renderError(Posts_API.currentHttpError);
     }
     removeWaitingGif();
-
+    
+    
     return endOfData;
 
    /* for (let i = 0; i < 5; i++) {
         $("#itemsPanel").append(renderPost());
     }*/
-}
-
-function renderError(message) {
-    hold_Periodic_Refresh = true;
-    hideBookmarks(); /* ------------------------------------------------ REVOIR ------------------------------------------------ */
-    /*$("#actionTitle").text("Erreur du serveur...");*/
-    $("#errorContainer").show();
-    $("#errorContainer").append($(`<div>${message}</div>`));
 }
 
 function renderPost(post, textDescription, descriptionPostId, wordsLengthMore, valueSearchBar = "", valueCategory = "", isSearch = false) {
@@ -502,7 +498,7 @@ function renderPostForm(post = null) {
         post["Creation"] = new Date().getTime();
         showWaitingGif();
         let result = await Posts_API.Save(post, create);
-        if (result) {
+        if (!Posts_API.error) {
             showPosts();
            /* pageManager.scrollToElem(Bookmark.Id);*/
         }

@@ -1,5 +1,5 @@
 //const API_URL = "https://api-server-5.glitch.me/api/posts";
-class Posts_API{
+export class Posts_API{
     static API_URL() { return "http://localhost:5000/api/posts"; }
     static initHttpState() {
         this.currentHttpError = "";
