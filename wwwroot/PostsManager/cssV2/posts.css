@@ -33,6 +33,11 @@
     flex: 1;
     flex-direction: row;
     justify-content: end;
+    visibility: hidden;
+}
+
+.postContainer:hover .iconsContainer{
+    visibility: visible;
 }
 
 .titlePostContainer {
