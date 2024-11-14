@@ -120,8 +120,8 @@ async function renderPosts(queryString, isSearch) {
         queryString += lastQueryString;
     } else {
         if (lastQueryString === "") {
-            lastQueryString += "&sort=category";
-            queryString += "&sort=category";
+            lastQueryString += "&sort=Creation,desc";
+            queryString += "&sort=Creation,desc";
         } else
             queryString += lastQueryString;
     }
@@ -265,7 +265,7 @@ function renderPost(post, textDescription, descriptionPostId, wordsLengthMore, v
         </div>
         `);
     } else {
-        if (valueSearchBar !== "" && isSearch) {
+        if (valueSearchBar !== "") {
             valueSearchBar = valueSearchBar.replaceAll(",", " ");
 
             let category = valueCategory;
@@ -585,7 +585,7 @@ function buildQueryString(){
     filterKeywords();
     filterCategories();
 
-    let queryString = "&sort=category&";
+    let queryString = "&sort=Creation,desc&";
     for (var key in filters){
         if (filters[key] != "")
             queryString += `${key}=${filters[key]}&`;
