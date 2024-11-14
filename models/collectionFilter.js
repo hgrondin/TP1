@@ -251,7 +251,7 @@ export default class collectionFilter {
             for (let item of collection) {
                 let record = "";
                 for (let field of this.model.fields) {
-                    if (field.type == "string")
+                    if (field.type == "string" && field.name != "Id")
                         record += item[field.name].toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '') + " ";
                 }
                 let keep = true;
