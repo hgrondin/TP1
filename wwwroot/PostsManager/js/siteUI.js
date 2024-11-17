@@ -359,10 +359,10 @@ async function renderDeletePostForm(id) {
             $('#deletePost').on("click", async function () {
                 addWaitingGif();
                 let result = await Posts_API.Delete(post.Id);
-                if (result)
+                if (!Posts_API.error) {
                     showPosts();
-                else
-                    renderError("Une erreur est survenue!");
+                    pageManager.update(false);
+                } else renderError("Une erreur est survenue! ");
             });
             $('#cancel').on("click", function () {
                 showPosts();
