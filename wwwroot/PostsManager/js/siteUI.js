@@ -451,7 +451,7 @@ function renderPostForm(post = null) {
         event.preventDefault();
         let post = getFormData($("#thePostForm"));
         post["Creation"] = new Date().getTime();
-        showWaitingGif();
+        addWaitingGif();
         let result = await Posts_API.Save(post, create);
         if (!Posts_API.error) {
             showPosts();
