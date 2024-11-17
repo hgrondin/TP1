@@ -167,7 +167,12 @@ async function renderPosts(queryString, isSearch) {
                         $('[completeDescription="'+id+'"]').show();
                         $('[descriptionPostId="'+id+'"]').hide();
                         $(this).hide();
+
+                        let index = postsSeeMore.indexOf(id);
+                        if (index !== -1)
+                            postsSeeMore.splice(index, 1);
                         postsSeeMore.push(id);
+
                         let parent = $(this).parent();
                         let showLess = parent.children('.seeLessDescriptionPost');
                         showLess.show();
