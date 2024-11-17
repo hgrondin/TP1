@@ -10,6 +10,8 @@ let selectedCategory = "";
 let lastQueryString = "";
 let postsLastSearch;
 
+let postsSeeMore = [];
+
 let waiting = null;
 let waitingGifTrigger = 2000;
 function addWaitingGif() {
@@ -161,9 +163,12 @@ async function renderPosts(queryString, isSearch) {
                     wordsLengthMore = true;
                 }
 
+                let showSeeMore = false;
+                if (postsSeeMore.indexOf(post.Id) !== -1) {
+                    showSeeMore = true;
+                }
 
-
-                $("#itemsPanel").append(renderPost(post, text, counter, wordsLengthMore));
+                $("#itemsPanel").append(renderPost(post, text, counter, wordsLengthMore, "", "", showSeeMore));
 
                 if (wordsLengthMore) {
                     $(".seeMoreDescriptionPost").on("click", function() {
@@ -171,6 +176,7 @@ async function renderPosts(queryString, isSearch) {
                         $('[completeDescription="'+id+'"]').show();
                         $('[descriptionPostId="'+id+'"]').hide();
                         $(this).hide();
+                        postsSeeMore.push(id);
                     });
                 }          
 
@@ -204,7 +210,7 @@ async function renderPosts(queryString, isSearch) {
         } else {
             endOfData = true;
 
-            $("#itemsPanel").append(renderPost(null, "", 0, false, filters["keywords"], filters["category"], isSearch));
+            $("#itemsPanel").append(renderPost(null, "", 0, false, filters["keywords"], filters["category"]));
         }
     } else {
         renderError(Posts_API.currentHttpError);
@@ -219,19 +225,30 @@ async function renderPosts(queryString, isSearch) {
     }*/
 }
 
-function renderPost(post, textDescription, descriptionPostId, wordsLengthMore, valueSearchBar = "", valueCategory = "", isSearch = false) {
+function renderPost(post, textDescription, descriptionPostId, wordsLengthMore, valueSearchBar = "", valueCategory = "", showSeeMore = false) {
     if (post !== null) {
         let elementsWordsLengthMore;
 
         if (wordsLengthMore) {
-            elementsWordsLengthMore = `<p class="descriptionPost text" completeDescription="${descriptionPostId}" style="display: none">
+            if (!showSeeMore) {
+            elementsWordsLengthMore = `<p class="descriptionPost text" completeDescription="${post.Id}" style="display: none">
                                             ${post.Text.replaceAll("\r\n", "<br>")}                 
                                         </p>
-                                        <p class="descriptionPost text" descriptionPostId="${descriptionPostId}">
+                                        <p class="descriptionPost text" descriptionPostId="${post.Id}">
                                             ${textDescription}...
                                         </p>
-                                        <p class="seeMoreDescriptionPost seeMore" seeMore="${descriptionPostId}">Voir plus</p>
+                                        <p class="seeMoreDescriptionPost seeMore" seeMore="${post.Id}">Voir plus</p>
                                         `;
+            } else {
+                elementsWordsLengthMore = `<p class="descriptionPost text" completeDescription="${post.Id}">
+                                            ${post.Text.replaceAll("\r\n", "<br>")}                 
+                                            </p>
+                                            <p class="descriptionPost text" descriptionPostId="${post.Id}" style="display: none">
+                                                ${textDescription}...
+                                            </p>
+                                            <p class="seeMoreDescriptionPost seeMore" seeMore="${post.Id}" style="display: none">Voir plus</p>
+                                            `;
+            }
         } else {
             elementsWordsLengthMore = `<p class="descriptionPost text">
                                             ${textDescription}                 
