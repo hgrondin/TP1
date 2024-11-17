@@ -81,6 +81,20 @@
     cursor: pointer;
 }
 
+.seeLessDescriptionPost {
+    width: fit-content;
+    text-align: center;
+    text-decoration:underline;
+    color: rgb(119, 119, 119);
+    cursor: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.seeLessDescriptionPost:hover {
+    cursor: pointer;
+}
+
 .text {
     font-family: "Roboto", sans-serif;
 }

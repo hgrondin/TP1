@@ -168,8 +168,25 @@ async function renderPosts(queryString, isSearch) {
                         $('[descriptionPostId="'+id+'"]').hide();
                         $(this).hide();
                         postsSeeMore.push(id);
+                        let parent = $(this).parent();
+                        let showLess = parent.children('.seeLessDescriptionPost');
+                        showLess.show();
                     });
-                }          
+                }
+
+                $(".seeLessDescriptionPost").on("click", function() {
+                    let id = $(this).attr("seeLess");
+                    const index = postsSeeMore.indexOf(id);
+                    if (index > -1) {
+                        postsSeeMore.splice(index, 1); //remove from array
+                    }
+                    let parent = $(this).parent();
+                    let seeMoreBtn = parent.children('.seeMoreDescriptionPost');
+                    seeMoreBtn.show();
+                    $(this).hide();
+                    $('[completeDescription="'+id+'"]').hide();
+                    $('[descriptionPostId="'+id+'"]').show();
+                });
             });
 
             $(".editCmd").off();
@@ -208,6 +225,7 @@ function renderPost(post, textDescription, wordsLengthMore, valueSearchBar = "",
                                             ${textDescription}...
                                         </p>
                                         <p class="seeMoreDescriptionPost seeMore" seeMore="${post.Id}">Voir plus</p>
+                                        <p class="seeLessDescriptionPost seeLess" seeLess="${post.Id}" style="display: none">Voir moins</p>
                                         `;
             } else {
                 elementsWordsLengthMore = `<p class="descriptionPost text" completeDescription="${post.Id}">
@@ -217,6 +235,7 @@ function renderPost(post, textDescription, wordsLengthMore, valueSearchBar = "",
                                                 ${textDescription}...
                                             </p>
                                             <p class="seeMoreDescriptionPost seeMore" seeMore="${post.Id}" style="display: none">Voir plus</p>
+                                            <p class="seeLessDescriptionPost seeLess" seeLess="${post.Id}">Voir moins</p>
                                             `;
             }
         } else {
