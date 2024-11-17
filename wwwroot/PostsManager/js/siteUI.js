@@ -161,6 +161,8 @@ async function renderPosts(queryString, isSearch) {
                     wordsLengthMore = true;
                 }
 
+
+
                 $("#itemsPanel").append(renderPost(post, text, counter, wordsLengthMore));
 
                 if (wordsLengthMore) {
@@ -223,7 +225,7 @@ function renderPost(post, textDescription, descriptionPostId, wordsLengthMore, v
 
         if (wordsLengthMore) {
             elementsWordsLengthMore = `<p class="descriptionPost text" completeDescription="${descriptionPostId}" style="display: none">
-                                            ${post.Text}                 
+                                            ${post.Text.replaceAll("\r\n", "<br>")}                 
                                         </p>
                                         <p class="descriptionPost text" descriptionPostId="${descriptionPostId}">
                                             ${textDescription}...
