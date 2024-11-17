@@ -456,10 +456,11 @@ function renderPostForm(post = null) {
         if (!Posts_API.error) {
             showPosts();
             await pageManager.update(false);
-            pageManager.scrollToElem(post.Id); //To go at the element in the scroll view        
+            pageManager.scrollToElem(result.Id); //To go at the element in the scroll view        
         }
         else
             renderError("Une erreur est survenue! ");
+        removeWaitingGif();
     });
     $('#cancel').on("click", function () {
         showPosts();
