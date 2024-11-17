@@ -357,7 +357,7 @@ async function renderDeletePostForm(id) {
                 </div> 
             `);
             $('#deletePost').on("click", async function () {
-                showWaitingGif();
+                addWaitingGif();
                 let result = await Posts_API.Delete(post.Id);
                 if (result)
                     showPosts();
