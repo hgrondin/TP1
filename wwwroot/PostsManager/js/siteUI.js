@@ -331,6 +331,7 @@ async function renderDeletePostForm(id) {
     if (!Posts_API.error){
         let post = res.data;
         if (post !== null) {
+            post.Text = post.Text.replaceAll("\r\n", "<br>");
             $("#postForm").append(`
                 <h2 id="actionTitle" class="text">Effacer cette publciation?</h2>
                 <div class="scrollPost">
