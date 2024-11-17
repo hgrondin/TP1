@@ -36,7 +36,7 @@ async function Init_UI() {
         height: $("#sample").outerHeight() //La hauteur extérieur de l'élément
     };
 
-    let pageManager = new PageManager('scrollPanel', 'itemsPanel', itemLayout, renderPosts);
+    pageManager = new PageManager('scrollPanel', 'itemsPanel', itemLayout, renderPosts);
 
     showPosts();
     $("#postForm").hide();
