@@ -250,7 +250,7 @@ function renderPost(post, textDescription, wordsLengthMore, valueSearchBar = "",
         }
 
         return $(`
-        <div class="postContainer">
+        <div class="postContainer" id="${post.Id}">
             <div class="globalTopInformationsContainer">
                 <div class="topInformationsContainer">
                     <p class="categoryPost text">${post.Category.toUpperCase()}</p>
@@ -454,7 +454,8 @@ function renderPostForm(post = null) {
         let result = await Posts_API.Save(post, create);
         if (!Posts_API.error) {
             showPosts();
-           /* pageManager.scrollToElem(Bookmark.Id);*/
+            await pageManager.update(false);
+            pageManager.scrollToElem(post.Id); //To go at the element in the scroll view        
         }
         else
             renderError("Une erreur est survenue! ");
