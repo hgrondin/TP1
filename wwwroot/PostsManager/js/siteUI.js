@@ -456,7 +456,7 @@ function renderPostForm(post = null) {
         if (!Posts_API.error) {
             showPosts();
             await pageManager.update(false);
-            pageManager.scrollToElem(result.Id); //To go at the element in the scroll view        
+            pageManager.scrollToElem(create ? result.Id : post.Id); //To go at the element in the scroll view        
         }
         else
             renderError("Une erreur est survenue! ");
