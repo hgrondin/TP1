@@ -144,7 +144,7 @@ async function renderPosts(queryString, isSearch, cantHaveNoResult) {
     //S'il n'y a pas d'erreur, on peut continuer
 
     /*TO DO: Faire la gesiton avec le Etag (voir appUI.cs du projet Bookmarks2)*/
-    //currentETag = response.ETag;
+    currentETag = response.ETag;
     let posts = response.data;
     if (posts.length > 0) {
       posts.forEach((post) => {
