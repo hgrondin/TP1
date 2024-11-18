@@ -59,6 +59,7 @@ class PageManager {
     storeScrollPosition() {
         this.scrollPanel.off(); //La méthode off() supprime les gestionnaires d'événements qui ont été attachés avec .on().
         this.previousScrollPosition = this.scrollPosition(); //Retourne la position du scrollTop().
+        this.previousScrollSize = this.itemsPanel.innerHeight();
     }
 
     //Permet de reset les paramètres de la scroll view rattachés à la position de cette dernière.
@@ -69,17 +70,23 @@ class PageManager {
     }
 
     
-    restoreScrollPosition() {
+    restoreScrollPosition(stayOnPlace = false) {
         this.scrollPanel.off();
-        this.scrollPanel.scrollTop(this.previousScrollPosition);
+        if (stayOnPlace)
+          this.scrollPanel.scrollTop(this.previousScrollPosition + (this.itemsPanel.innerHeight() - this.previousScrollSize));
+        else
+          this.scrollPanel.scrollTop(this.previousScrollPosition);
     }
 
     //La méthode update() permet de gérer le contenu du scroll view.
-    async update(append = true, isSearch = false) {
+    async update(append = true, isSearch = false, stayOnPlace = false, cantHaveNoResult = true) {
+        if (isSearch){
+          this.resetScrollPosition()
+        }
         this.storeScrollPosition();
         if (!append) this.itemsPanel.empty(); //Si on ajoute pas, on supprime tous les éléments enfant de l'élément relié à la variable itemsPanel.
-        let endOfData = await this.getItems(this.currentPageToQueryString(append), isSearch); //On va chercher les données selon une queryString.
-        this.restoreScrollPosition();
+        let endOfData = await this.getItems(this.currentPageToQueryString(append), isSearch, cantHaveNoResult); //On va chercher les données selon une queryString.
+        this.restoreScrollPosition(stayOnPlace);
         let instance = this;
         this.scrollPanel.scroll(function () {
             if (!endOfData && (instance.scrollPanel.scrollTop() + instance.scrollPanel.outerHeight() >= instance.itemsPanel.outerHeight() - instance.itemLayout.height / 2)) {
