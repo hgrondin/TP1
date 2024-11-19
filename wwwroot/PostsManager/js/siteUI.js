@@ -66,6 +66,7 @@ async function Init_UI() {
 
   $("#abort").on("click", async function () {
     showPosts();
+    $("#aboutContainer").hide();
   });
   $("#aboutCmd").on("click", function () {
     renderAbout();
@@ -78,6 +79,7 @@ function renderAbout() {
   saveContentScrollPosition();
   hidePosts();
   $("#createPost").hide();
+  $("#postForm").hide();
   $("#abort").show();
   $("#actionTitle").text("À propos...");
   $("#aboutContainer").show();
@@ -139,7 +141,8 @@ async function renderPosts(queryString, isSearch, cantHaveNoResult) {
   addWaitingGif();
 
   let response = await Posts_API.GetQuery(queryString);
-
+  
+  
   if (!Posts_API.error) {
     //S'il n'y a pas d'erreur, on peut continuer
 
@@ -465,7 +468,7 @@ function renderPostForm(post = null) {
                 id="Text"
                 placeholder="Contenu de la publication"
                 required
-                RequireMessage="Veuillez entrer le contenu de la publication"                 
+                RequireMessage="Veuillez entrer le contenu de la publication"
             >${post.Text}</textarea>
             <label for="Category" class="form-label">Catégorie </label>
             <input
@@ -497,6 +500,13 @@ function renderPostForm(post = null) {
   initImageUploaders();
   initFormValidation(); // important do to after all html injection!
   let oldCategory = post.Category;
+  
+  $("#savePost").on("click", function (event) {
+    $("#Title").val($("#Title").val().trim());
+    $("#Text").val($("#Text").val().trim());
+    $("#Category").val($("#Category").val().trim());
+  });
+  
   $("#thePostForm").on("submit", async function (event) {
     event.preventDefault();
     let post = getFormData($("#thePostForm"));
@@ -558,7 +568,7 @@ async function updateSelectOfCategories(categories) {
   select.empty();
   
   let selectedCategoryNotExist = false;
-  if (!categories.includes(selectedCategory)){
+  if (selectedCategory != "" && !categories.includes(selectedCategory)){
     selectedCategory = "";
     delete filters["category"];
     selectedCategoryNotExist = true;
@@ -594,7 +604,7 @@ async function updateSelectOfCategories(categories) {
   });
   
   if (selectedCategoryNotExist){
-    await pageManager.update(false, true);
+    await pageManager.update(false, true, true);
   }
 }
 
@@ -659,7 +669,7 @@ function start_Periodic_Refresh() {
       let etag = await Posts_API.HEAD();
       if (currentETag != etag) {
         currentETag = etag;
-        await pageManager.update(false);
+        await pageManager.update(false, false, true);
         setAllCategories();
       }
     }

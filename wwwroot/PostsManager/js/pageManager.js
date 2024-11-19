@@ -81,7 +81,7 @@ class PageManager {
     //La méthode update() permet de gérer le contenu du scroll view.
     async update(append = true, isSearch = false, stayOnPlace = false, cantHaveNoResult = true) {
         if (isSearch){
-          this.resetScrollPosition()
+          this.resetScrollPosition();
         }
         this.storeScrollPosition();
         if (!append) this.itemsPanel.empty(); //Si on ajoute pas, on supprime tous les éléments enfant de l'élément relié à la variable itemsPanel.
@@ -94,7 +94,6 @@ class PageManager {
                 instance.currentPage.offset++;
                 instance.update(true);
             }
-            //console.log(`scroll`,instance.scrollPanel.scrollTop())
         });
     }
 }
